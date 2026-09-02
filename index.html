@@ -21,19 +21,29 @@
     font-family:Georgia,'Times New Roman',serif; font-weight:700; font-size:88px; line-height:1;
   }
   .label{font-size:14px; letter-spacing:.04em; opacity:.75;}
-  a.fallback{margin-top:10px; font-size:13px; color:#16324A;}
+  .hint{max-width:280px; text-align:center; font-size:13px; line-height:1.5; opacity:.8; margin:4px 0 6px;}
+  a.btn{
+    margin-top:6px; padding:12px 22px; border-radius:999px; background:#16324A; color:#F1F0EC;
+    text-decoration:none; font-size:14px; font-weight:600;
+  }
   noscript{margin-top:16px; font-size:14px; text-align:center; padding:0 24px;}
 </style>
 </head>
 <body>
   <div class="num">98</div>
   <div class="label">Diario di Bordo</div>
-  <a class="fallback" href="https://script.google.com/macros/s/AKfycbzQBgWRVgVEW-1N5Ygb7xuJZNmWFO39tW_7T8M0fpabr6CoX3_JlGrU2X5GJuaFyfEJ/exec">Apri il diario &rarr;</a>
+  <p class="hint">Per creare l'icona: tocca <strong>Condividi</strong> poi <strong>Aggiungi alla schermata Home</strong> — senza aprire il diario prima.</p>
+  <a class="btn" href="https://script.google.com/macros/s/AKfycbzQBgWRVgVEW-1N5Ygb7xuJZNmWFO39tW_7T8M0fpabr6CoX3_JlGrU2X5GJuaFyfEJ/exec">Apri il diario &rarr;</a>
   <noscript>
-    JavaScript è disattivato: tocca il link qui sopra per aprire il diario.
+    <p class="hint">JavaScript è disattivato: tocca il pulsante qui sopra per aprire il diario.</p>
   </noscript>
   <script>
-    location.replace('https://script.google.com/macros/s/AKfycbzQBgWRVgVEW-1N5Ygb7xuJZNmWFO39tW_7T8M0fpabr6CoX3_JlGrU2X5GJuaFyfEJ/exec');
+    var APP_URL = 'https://script.google.com/macros/s/AKfycbzQBgWRVgVEW-1N5Ygb7xuJZNmWFO39tW_7T8M0fpabr6CoX3_JlGrU2X5GJuaFyfEJ/exec';
+    var isStandalone = window.navigator.standalone === true ||
+      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    if (isStandalone) {
+      location.replace(APP_URL);
+    }
   </script>
 </body>
 </html>
