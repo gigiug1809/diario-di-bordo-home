@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ITA98">
+<meta name="launcher-version" content="3">
 <meta name="theme-color" content="#C7C6C2">
 <style>
   :root{--bg:#C7C6C2; --ink:#16324A; --card:#F1F0EC; --muted:#4f6375;}
@@ -47,7 +48,7 @@
   <div class="label">Le mie app</div>
 
   <nav class="apps" id="apps">
-    <!-- Per aggiungere un'app: copia un blocco <a class="app"> e cambia link, titolo e descrizione. -->
+    <!-- Per aggiungere un'app: copia un blocco <a class="app">, cambia link, titolo e descrizione e aumenta launcher-version in alto, così il telefono si aggiorna da solo. -->
     <a class="app" href="https://script.google.com/macros/s/AKfycbzQBgWRVgVEW-1N5Ygb7xuJZNmWFO39tW_7T8M0fpabr6CoX3_JlGrU2X5GJuaFyfEJ/exec">
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6.5A2.5 2.5 0 0 0 4 21.5v-2z"/><path d="M8 7h7M8 11h5"/></svg></span>
       <div class="txt"><div class="t">Diario di Bordo</div><div class="s">Uscite in barca, materiali e lavori</div></div>
@@ -72,6 +73,22 @@
     var isStandalone = window.navigator.standalone === true ||
       (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
     if (isStandalone) document.getElementById('hint').hidden = true;
+
+    // L'icona sul telefono tiene in memoria la pagina (anche 10 minuti di
+    // cache di GitHub): quando torna in primo piano controlla se è uscita una
+    // versione nuova della lista e, se sì, si ricarica da sola.
+    function checkUpdate() {
+      var mine = document.querySelector('meta[name="launcher-version"]').content;
+      fetch(location.pathname + '?v=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.text(); })
+        .then(function (html) {
+          var m = html.match(/name="launcher-version" content="([^"]+)"/);
+          if (m && m[1] !== mine) location.replace(location.pathname + '?v=' + m[1]);
+        })
+        .catch(function () {});
+    }
+    checkUpdate();
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) checkUpdate(); });
   </script>
 </body>
 </html>
